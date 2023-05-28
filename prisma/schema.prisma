@@ -1,0 +1,89 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model TypePanden {
+  id        Int      @id @default(autoincrement())
+  naam      String   @unique @db.VarChar(45)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Panden    Panden[]
+}
+
+model Panden {
+  id                 Int          @id @default(autoincrement())
+  straat             String       @db.VarChar(45)
+  huisnummer         String       @db.VarChar(45)
+  bus                String?      @db.VarChar(45)
+  postcode           Int
+  gemeente           String       @db.VarChar(45)
+  prijs              Int
+  aantalKamers       Int
+  oppervlakte        Int
+  beschrijving       String
+  typeId             Int
+  regioId            Int
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime     @updatedAt
+  IsVerkochtVerhuurd Boolean      @default(false)
+  type               TypePanden   @relation(fields: [typeId], references: [id])
+  Regio              Regio        @relation(fields: [regioId], references: [id])
+  Afbeeldingen       Afbeelding[]
+  typePandenId       Int
+  PandRegio          PandRegio[]
+
+  @@index([typeId], name: "idx_panden_typeId")
+}
+
+model Gebruikers {
+  id         Int         @id @default(autoincrement())
+  voorNaam   String      @db.VarChar(45)
+  achterNaam String      @db.VarChar(45)
+  email      String      @unique @db.VarChar(150)
+  wachtwoord String      @db.VarChar(150)
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  PandRegio  PandRegio[]
+}
+
+model Regio {
+  id        Int         @id @default(autoincrement())
+  naam      String      @unique
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  Panden    Panden[]
+  PandRegio PandRegio[]
+
+  @@index([naam])
+}
+
+model Afbeelding {
+  id        Int      @id @default(autoincrement())
+  url       String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  pandId    Int
+  Panden    Panden   @relation(fields: [pandId], references: [id])
+}
+
+model PandRegio {
+  pandId       Int      @db.Int
+  regioId      Int      @db.Int
+  pandregiocol String   @db.VarChar(45)
+  gebruikersId Int      @db.Int
+  createdAt    DateTime @default(now())
+
+  pand      Panden     @relation(fields: [pandId], references: [id])
+  regio     Regio      @relation(fields: [regioId], references: [id])
+  gebruiker Gebruikers @relation(fields: [gebruikersId], references: [id])
+
+  @@id([pandId, regioId, gebruikersId])
+}

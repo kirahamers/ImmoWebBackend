@@ -12,8 +12,7 @@ const logger = require("morgan");
 //lokale modules
 const indexRouter = require("./routes/index");
 const pandenRouter = require("./routes/panden");
-const pandregioRouter = require("./routes/pandregio");
-const gebruikersRouter = require("./routes/gebruikers");
+//const pandregioRouter = require("./routes/pandregio");
 const regioRouter = require("./routes/regio");
 const typepandenRouter = require("./routes/typepanden");
 const afbeeldingRouter = require("./routes/afbeelding");
@@ -34,8 +33,7 @@ app.use((req, res, next) => {
 //koppelen van paden aan routes
 app.use("/", indexRouter);
 app.use("/panden", pandenRouter);
-app.use("/pandregio", pandregioRouter);
-app.use("/gebruikers", gebruikersRouter);
+//app.use("/pandregio", pandregioRouter);
 app.use("/regio", regioRouter);
 app.use("/typepanden", typepandenRouter);
 app.use("/afbeeldingen", afbeeldingRouter);

@@ -38,29 +38,18 @@ model Panden {
   Regio              Regio        @relation(fields: [regioId], references: [id])
   Afbeeldingen       Afbeelding[]
   typePandenId       Int
-  PandRegio          PandRegio[]
+  //PandRegio          PandRegio[]
 
   @@index([typeId], name: "idx_panden_typeId")
 }
 
-model Gebruikers {
-  id         Int         @id @default(autoincrement())
-  voorNaam   String      @db.VarChar(45)
-  achterNaam String      @db.VarChar(45)
-  email      String      @unique @db.VarChar(150)
-  wachtwoord String      @db.VarChar(150)
-  createdAt  DateTime    @default(now())
-  updatedAt  DateTime    @updatedAt
-  PandRegio  PandRegio[]
-}
-
 model Regio {
-  id        Int         @id @default(autoincrement())
-  naam      String      @unique
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @updatedAt
+  id        Int      @id @default(autoincrement())
+  naam      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   Panden    Panden[]
-  PandRegio PandRegio[]
+  //PandRegio PandRegio[]
 
   @@index([naam])
 }
@@ -74,16 +63,15 @@ model Afbeelding {
   Panden    Panden   @relation(fields: [pandId], references: [id])
 }
 
-model PandRegio {
-  pandId       Int      @db.Int
-  regioId      Int      @db.Int
-  pandregiocol String   @db.VarChar(45)
-  gebruikersId Int      @db.Int
-  createdAt    DateTime @default(now())
+// model PandRegio {
+//   pandId       Int      @db.Int
+//   regioId      Int      @db.Int
+//   pandregiocol String   @db.VarChar(45)
+//   gebruikersId Int      @db.Int
+//   createdAt    DateTime @default(now())
 
-  pand      Panden     @relation(fields: [pandId], references: [id])
-  regio     Regio      @relation(fields: [regioId], references: [id])
-  gebruiker Gebruikers @relation(fields: [gebruikersId], references: [id])
+//   pand  Panden @relation(fields: [pandId], references: [id])
+//   regio Regio  @relation(fields: [regioId], references: [id])
 
-  @@id([pandId, regioId, gebruikersId])
-}
+//   @@id([pandId, regioId, gebruikersId])
+// }

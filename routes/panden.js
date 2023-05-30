@@ -55,4 +55,44 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+// Update een bestaand pand
+router.put("/:id", async (req, res) => {
+  const { id } = req.params;
+  const { straat, huisnummer, postcode, gemeente, prijs } = req.body;
+  try {
+    const updatedPand = await prisma.panden.update({
+      where: {
+        id: parseInt(id),
+      },
+      data: {
+        straat,
+        huisnummer,
+        postcode,
+        gemeente,
+        prijs,
+      },
+    });
+    res.json(updatedPand);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Something went wrong" });
+  }
+});
+
+// Verwijder een pand
+router.delete("/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    await prisma.panden.delete({
+      where: {
+        id: parseInt(id),
+      },
+    });
+    res.json({ message: "Pand deleted successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Something went wrong" });
+  }
+});
+
 module.exports = router;

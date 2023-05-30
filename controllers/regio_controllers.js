@@ -2,11 +2,11 @@ const { PrismaClient } = require("@prisma/client");
 
 const prisma = new PrismaClient();
 
-const TypePandenController = {
+const RegioController = {
   findAll: async (req, res) => {
     try {
-      const typePanden = await prisma.typePanden.findMany();
-      res.json(typePanden);
+      const regios = await prisma.regio.findMany();
+      res.json(regios);
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: "Something went wrong" });
@@ -16,12 +16,12 @@ const TypePandenController = {
   create: async (req, res) => {
     const { naam } = req.body;
     try {
-      const typePand = await prisma.typePanden.create({
+      const regio = await prisma.regio.create({
         data: {
           naam,
         },
       });
-      res.json(typePand);
+      res.json(regio);
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: "Something went wrong" });
@@ -31,15 +31,15 @@ const TypePandenController = {
   findById: async (req, res) => {
     const { id } = req.params;
     try {
-      const typePand = await prisma.typePanden.findUnique({
+      const regio = await prisma.regio.findUnique({
         where: {
           id: parseInt(id),
         },
       });
-      if (typePand) {
-        res.json(typePand);
+      if (regio) {
+        res.json(regio);
       } else {
-        res.status(404).json({ error: "TypePand not found" });
+        res.status(404).json({ error: "Regio not found" });
       }
     } catch (error) {
       console.error(error);
@@ -51,7 +51,7 @@ const TypePandenController = {
     const { id } = req.params;
     const { naam } = req.body;
     try {
-      const updatedTypePand = await prisma.typePanden.update({
+      const updatedRegio = await prisma.regio.update({
         where: {
           id: parseInt(id),
         },
@@ -59,7 +59,7 @@ const TypePandenController = {
           naam,
         },
       });
-      res.json(updatedTypePand);
+      res.json(updatedRegio);
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: "Something went wrong" });
@@ -69,12 +69,12 @@ const TypePandenController = {
   delete: async (req, res) => {
     const { id } = req.params;
     try {
-      await prisma.typePanden.delete({
+      await prisma.regio.delete({
         where: {
           id: parseInt(id),
         },
       });
-      res.sendStatus(204);
+      res.json({ message: "Regio deleted successfully" });
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: "Something went wrong" });
@@ -82,4 +82,4 @@ const TypePandenController = {
   },
 };
 
-module.exports = TypePandenController;
+module.exports = RegioController;

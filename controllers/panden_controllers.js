@@ -2,11 +2,11 @@ const { PrismaClient } = require("@prisma/client");
 
 const prisma = new PrismaClient();
 
-const TypePandenController = {
+const PandenController = {
   findAll: async (req, res) => {
     try {
-      const typePanden = await prisma.typePanden.findMany();
-      res.json(typePanden);
+      const panden = await prisma.panden.findMany();
+      res.json(panden);
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: "Something went wrong" });
@@ -14,14 +14,18 @@ const TypePandenController = {
   },
 
   create: async (req, res) => {
-    const { naam } = req.body;
+    const { straat, huisnummer, postcode, gemeente, prijs } = req.body;
     try {
-      const typePand = await prisma.typePanden.create({
+      const pand = await prisma.panden.create({
         data: {
-          naam,
+          straat,
+          huisnummer,
+          postcode,
+          gemeente,
+          prijs,
         },
       });
-      res.json(typePand);
+      res.json(pand);
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: "Something went wrong" });
@@ -31,15 +35,15 @@ const TypePandenController = {
   findById: async (req, res) => {
     const { id } = req.params;
     try {
-      const typePand = await prisma.typePanden.findUnique({
+      const pand = await prisma.panden.findUnique({
         where: {
           id: parseInt(id),
         },
       });
-      if (typePand) {
-        res.json(typePand);
+      if (pand) {
+        res.json(pand);
       } else {
-        res.status(404).json({ error: "TypePand not found" });
+        res.status(404).json({ error: "Pand not found" });
       }
     } catch (error) {
       console.error(error);
@@ -49,17 +53,21 @@ const TypePandenController = {
 
   update: async (req, res) => {
     const { id } = req.params;
-    const { naam } = req.body;
+    const { straat, huisnummer, postcode, gemeente, prijs } = req.body;
     try {
-      const updatedTypePand = await prisma.typePanden.update({
+      const updatedPand = await prisma.panden.update({
         where: {
           id: parseInt(id),
         },
         data: {
-          naam,
+          straat,
+          huisnummer,
+          postcode,
+          gemeente,
+          prijs,
         },
       });
-      res.json(updatedTypePand);
+      res.json(updatedPand);
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: "Something went wrong" });
@@ -69,7 +77,7 @@ const TypePandenController = {
   delete: async (req, res) => {
     const { id } = req.params;
     try {
-      await prisma.typePanden.delete({
+      await prisma.panden.delete({
         where: {
           id: parseInt(id),
         },
@@ -82,4 +90,4 @@ const TypePandenController = {
   },
 };
 
-module.exports = TypePandenController;
+module.exports = PandenController;

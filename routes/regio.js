@@ -51,4 +51,40 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+// Update een bestaande regio
+router.put("/:id", async (req, res) => {
+  const { id } = req.params;
+  const { naam } = req.body;
+  try {
+    const updatedRegio = await prisma.regio.update({
+      where: {
+        id: parseInt(id),
+      },
+      data: {
+        naam,
+      },
+    });
+    res.json(updatedRegio);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Something went wrong" });
+  }
+});
+
+// Verwijder een regio
+router.delete("/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    await prisma.regio.delete({
+      where: {
+        id: parseInt(id),
+      },
+    });
+    res.json({ message: "Regio deleted successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Something went wrong" });
+  }
+});
+
 module.exports = router;

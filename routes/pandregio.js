@@ -4,7 +4,7 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const router = express.Router();
 
-// Haal alle pandRegio's op
+// Haal alle pandRegios op
 router.get("/", async (req, res) => {
   try {
     const pandRegios = await prisma.pandRegio.findMany();
@@ -50,6 +50,50 @@ router.get("/:pandId/:regioId/:gebruikersId", async (req, res) => {
     } else {
       res.status(404).json({ error: "PandRegio not found" });
     }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Something went wrong" });
+  }
+});
+
+// Update een bestaande pandRegio
+router.put("/:pandId/:regioId/:gebruikersId", async (req, res) => {
+  const { pandId, regioId, gebruikersId } = req.params;
+  const { pandregiocol } = req.body;
+  try {
+    const updatedPandRegio = await prisma.pandRegio.update({
+      where: {
+        pandId_regioId_gebruikersId: {
+          pandId: parseInt(pandId),
+          regioId: parseInt(regioId),
+          gebruikersId: parseInt(gebruikersId),
+        },
+      },
+      data: {
+        pandregiocol,
+      },
+    });
+    res.json(updatedPandRegio);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Something went wrong" });
+  }
+});
+
+// Verwijder een pandRegio
+router.delete("/:pandId/:regioId/:gebruikersId", async (req, res) => {
+  const { pandId, regioId, gebruikersId } = req.params;
+  try {
+    await prisma.pandRegio.delete({
+      where: {
+        pandId_regioId_gebruikersId: {
+          pandId: parseInt(pandId),
+          regioId: parseInt(regioId),
+          gebruikersId: parseInt(gebruikersId),
+        },
+      },
+    });
+    res.json({ message: "PandRegio deleted successfully" });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Something went wrong" });

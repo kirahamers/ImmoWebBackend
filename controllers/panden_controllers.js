@@ -14,18 +14,108 @@ const PandenController = {
   },
 
   create: async (req, res) => {
-    const { straat, huisnummer, postcode, gemeente, prijs } = req.body;
+    const {
+      straat,
+      huisnummer,
+      bus,
+      postcode,
+      gemeente,
+      prijs,
+      aantalKamers,
+      oppervlakte,
+      beschrijving,
+      typeId,
+      regioId,
+    } = req.body;
+
     try {
+      const regio = await prisma.regio.findUnique({
+        where: {
+          id: regioId,
+        },
+      });
+
+      const type = await prisma.typePanden.findUnique({
+        where: {
+          id: typeId,
+        },
+      });
+
       const pand = await prisma.panden.create({
+        data: {
+          straat,
+          huisnummer,
+          bus,
+          postcode,
+          gemeente,
+          prijs,
+          aantalKamers,
+          oppervlakte,
+          beschrijving,
+          type: {
+            connect: {
+              id: typeId,
+            },
+          },
+          regio: {
+            connect: {
+              id: regioId,
+            },
+          },
+        },
+      });
+
+      res.json(pand);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Something went wrong" });
+    }
+  },
+
+  update: async (req, res) => {
+    const { id } = req.params;
+    const { straat, huisnummer, postcode, gemeente, prijs, typeId, regioId } =
+      req.body;
+
+    try {
+      const regio = await prisma.regio.findUnique({
+        where: {
+          id: regioId,
+        },
+      });
+
+      const type = await prisma.typePanden.findUnique({
+        where: {
+          id: typeId,
+        },
+      });
+
+      const updatedPand = await prisma.panden.update({
+        where: {
+          id: parseInt(id),
+        },
         data: {
           straat,
           huisnummer,
           postcode,
           gemeente,
           prijs,
+          typeId,
+          regioId,
+          type: {
+            connect: {
+              id: type.id,
+            },
+          },
+          Regio: {
+            connect: {
+              id: regio.id,
+            },
+          },
         },
       });
-      res.json(pand);
+
+      res.json(updatedPand);
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: "Something went wrong" });
@@ -53,7 +143,8 @@ const PandenController = {
 
   update: async (req, res) => {
     const { id } = req.params;
-    const { straat, huisnummer, postcode, gemeente, prijs } = req.body;
+    const { straat, huisnummer, postcode, gemeente, prijs, typeId, regioId } =
+      req.body;
     try {
       const updatedPand = await prisma.panden.update({
         where: {
@@ -65,8 +156,39 @@ const PandenController = {
           postcode,
           gemeente,
           prijs,
+          typeId,
+          regioId,
         },
       });
+
+      // Update de bijbehorende regio met het bijgewerkte pand
+      await prisma.regio.update({
+        where: {
+          id: regioId,
+        },
+        data: {
+          Panden: {
+            connect: {
+              id: updatedPand.id,
+            },
+          },
+        },
+      });
+
+      // Update het bijbehorende typepand met het bijgewerkte pand
+      await prisma.typePanden.update({
+        where: {
+          id: typeId,
+        },
+        data: {
+          Panden: {
+            connect: {
+              id: updatedPand.id,
+            },
+          },
+        },
+      });
+
       res.json(updatedPand);
     } catch (error) {
       console.error(error);

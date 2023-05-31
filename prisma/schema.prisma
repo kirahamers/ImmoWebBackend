@@ -15,7 +15,6 @@ model TypePanden {
   naam      String   @unique @db.VarChar(45)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  Panden    Panden[]
 }
 
 model Panden {
@@ -34,13 +33,7 @@ model Panden {
   createdAt          DateTime     @default(now())
   updatedAt          DateTime     @updatedAt
   IsVerkochtVerhuurd Boolean      @default(false)
-  type               TypePanden   @relation(fields: [typeId], references: [id])
-  Regio              Regio        @relation(fields: [regioId], references: [id])
   Afbeeldingen       Afbeelding[]
-  typePandenId       Int
-  //PandRegio          PandRegio[]
-
-  @@index([typeId], name: "idx_panden_typeId")
 }
 
 model Regio {
@@ -48,10 +41,6 @@ model Regio {
   naam      String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  Panden    Panden[]
-  //PandRegio PandRegio[]
-
-  @@index([naam])
 }
 
 model Afbeelding {
@@ -62,16 +51,3 @@ model Afbeelding {
   pandId    Int
   Panden    Panden   @relation(fields: [pandId], references: [id])
 }
-
-// model PandRegio {
-//   pandId       Int      @db.Int
-//   regioId      Int      @db.Int
-//   pandregiocol String   @db.VarChar(45)
-//   gebruikersId Int      @db.Int
-//   createdAt    DateTime @default(now())
-
-//   pand  Panden @relation(fields: [pandId], references: [id])
-//   regio Regio  @relation(fields: [regioId], references: [id])
-
-//   @@id([pandId, regioId, gebruikersId])
-// }

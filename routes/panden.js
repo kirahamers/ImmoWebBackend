@@ -17,17 +17,37 @@ router.get("/", async (req, res) => {
 
 // Maak een nieuw pand aan
 router.post("/", async (req, res) => {
-  const { straat, huisnummer, postcode, gemeente, prijs } = req.body;
+  const {
+    straat,
+    huisnummer,
+    bus,
+    postcode,
+    gemeente,
+    prijs,
+    aantalKamers,
+    oppervlakte,
+    beschrijving,
+    typeId,
+    regioId,
+  } = req.body;
+
   try {
     const pand = await prisma.panden.create({
       data: {
         straat,
         huisnummer,
+        bus,
         postcode,
         gemeente,
         prijs,
+        aantalKamers,
+        oppervlakte,
+        beschrijving,
+        typeId,
+        regioId,
       },
     });
+
     res.json(pand);
   } catch (error) {
     console.error(error);
@@ -58,7 +78,19 @@ router.get("/:id", async (req, res) => {
 // Update een bestaand pand
 router.put("/:id", async (req, res) => {
   const { id } = req.params;
-  const { straat, huisnummer, postcode, gemeente, prijs } = req.body;
+  const {
+    straat,
+    huisnummer,
+    bus,
+    postcode,
+    gemeente,
+    prijs,
+    aantalKamers,
+    oppervlakte,
+    beschrijving,
+    typeId,
+    regioId,
+  } = req.body;
   try {
     const updatedPand = await prisma.panden.update({
       where: {
@@ -67,11 +99,46 @@ router.put("/:id", async (req, res) => {
       data: {
         straat,
         huisnummer,
+        bus,
         postcode,
         gemeente,
         prijs,
+        aantalKamers,
+        oppervlakte,
+        beschrijving,
+        typeId,
+        regioId,
       },
     });
+
+    // Update de bijbehorende regio met het bijgewerkte pand
+    await prisma.regio.update({
+      where: {
+        id: regioId,
+      },
+      data: {
+        Panden: {
+          connect: {
+            id: updatedPand.id,
+          },
+        },
+      },
+    });
+
+    // Update het bijbehorende typepand met het bijgewerkte pand
+    await prisma.typePanden.update({
+      where: {
+        id: typeId,
+      },
+      data: {
+        Panden: {
+          connect: {
+            id: updatedPand.id,
+          },
+        },
+      },
+    });
+
     res.json(updatedPand);
   } catch (error) {
     console.error(error);

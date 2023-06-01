@@ -4,6 +4,8 @@ const { PrismaClient } = require("@prisma/client");
 
 const prisma = new PrismaClient();
 
+const { deleteAfbeeldingenByPandId } = require("./afbeelding");
+
 // Haal alle panden op
 router.get("/", async (req, res) => {
   try {
@@ -90,6 +92,7 @@ router.put("/:id", async (req, res) => {
     beschrijving,
     typeId,
     regioId,
+    IsVerkochtVerhuurd,
   } = req.body;
   try {
     const updatedPand = await prisma.panden.update({
@@ -108,34 +111,7 @@ router.put("/:id", async (req, res) => {
         beschrijving,
         typeId,
         regioId,
-      },
-    });
-
-    // Update de bijbehorende regio met het bijgewerkte pand
-    await prisma.regio.update({
-      where: {
-        id: regioId,
-      },
-      data: {
-        Panden: {
-          connect: {
-            id: updatedPand.id,
-          },
-        },
-      },
-    });
-
-    // Update het bijbehorende typepand met het bijgewerkte pand
-    await prisma.typePanden.update({
-      where: {
-        id: typeId,
-      },
-      data: {
-        Panden: {
-          connect: {
-            id: updatedPand.id,
-          },
-        },
+        IsVerkochtVerhuurd,
       },
     });
 
@@ -156,6 +132,40 @@ router.delete("/:id", async (req, res) => {
       },
     });
     res.json({ message: "Pand deleted successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Something went wrong" });
+  }
+});
+
+// Verwijder een specifieke afbeelding
+router.delete("/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const deletedAfbeelding = await prisma.afbeelding.delete({
+      where: {
+        id: parseInt(id),
+      },
+    });
+    res.json(deletedAfbeelding);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Something went wrong" });
+  }
+});
+
+// Verwijder een specifiek pand en de bijbehorende afbeeldingen
+router.delete("/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    await deleteAfbeeldingenByPandId(id); // Afbeeldingen verwijderen
+    await prisma.panden.delete({
+      // Pand verwijderen
+      where: {
+        id: parseInt(id),
+      },
+    });
+    res.json({ message: "Pand successfully deleted" });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Something went wrong" });

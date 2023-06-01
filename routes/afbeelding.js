@@ -89,4 +89,20 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
+// Verwijder afbeeldingen op basis van pandId
+router.delete("/pand/:pandId", async (req, res) => {
+  const { pandId } = req.params;
+  try {
+    const deletedAfbeeldingen = await prisma.afbeelding.deleteMany({
+      where: {
+        pandId: parseInt(pandId),
+      },
+    });
+    res.json(deletedAfbeeldingen);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Something went wrong" });
+  }
+});
+
 module.exports = router;

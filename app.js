@@ -33,7 +33,6 @@ app.use((req, res, next) => {
 //koppelen van paden aan routes
 app.use("/", indexRouter);
 app.use("/panden", pandenRouter);
-//app.use("/pandregio", pandregioRouter);
 app.use("/regio", regioRouter);
 app.use("/typepanden", typepandenRouter);
 app.use("/afbeeldingen", afbeeldingRouter);

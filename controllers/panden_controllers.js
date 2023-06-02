@@ -9,38 +9,12 @@ const PandenController = {
       res.json(panden);
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: "Something went wrong" });
+      res.status(500).json({ error: "fout bij ophalen panden" });
     }
   },
 
   create: async (req, res) => {
-    const {
-      straat,
-      huisnummer,
-      bus,
-      postcode,
-      gemeente,
-      prijs,
-      aantalKamers,
-      oppervlakte,
-      beschrijving,
-      typeId,
-      regioId,
-    } = req.body;
-
     try {
-      const regio = await prisma.regio.findUnique({
-        where: {
-          id: regioId,
-        },
-      });
-
-      const type = await prisma.typePanden.findUnique({
-        where: {
-          id: typeId,
-        },
-      });
-
       const pand = await prisma.panden.create({
         data: {
           straat,
@@ -52,23 +26,15 @@ const PandenController = {
           aantalKamers,
           oppervlakte,
           beschrijving,
-          type: {
-            connect: {
-              id: typeId,
-            },
-          },
-          regio: {
-            connect: {
-              id: regioId,
-            },
-          },
+          typeId,
+          regioId,
         },
       });
 
       res.json(pand);
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: "Something went wrong" });
+      res.status(500).json({ error: "fout bij aanmaken pand" });
     }
   },
 
@@ -78,18 +44,6 @@ const PandenController = {
       req.body;
 
     try {
-      const regio = await prisma.regio.findUnique({
-        where: {
-          id: regioId,
-        },
-      });
-
-      const type = await prisma.typePanden.findUnique({
-        where: {
-          id: typeId,
-        },
-      });
-
       const updatedPand = await prisma.panden.update({
         where: {
           id: parseInt(id),
@@ -97,28 +51,22 @@ const PandenController = {
         data: {
           straat,
           huisnummer,
+          bus,
           postcode,
           gemeente,
           prijs,
+          aantalKamers,
+          oppervlakte,
+          beschrijving,
           typeId,
           regioId,
-          type: {
-            connect: {
-              id: type.id,
-            },
-          },
-          Regio: {
-            connect: {
-              id: regio.id,
-            },
-          },
         },
       });
 
       res.json(updatedPand);
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: "Something went wrong" });
+      res.status(500).json({ error: "fout bij updaten pand" });
     }
   },
 
@@ -133,11 +81,11 @@ const PandenController = {
       if (pand) {
         res.json(pand);
       } else {
-        res.status(404).json({ error: "Pand not found" });
+        res.status(404).json({ error: "pand niet gevonden" });
       }
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: "Something went wrong" });
+      res.status(500).json({ error: "fout bij zoeken pand" });
     }
   },
 
@@ -153,46 +101,22 @@ const PandenController = {
         data: {
           straat,
           huisnummer,
+          bus,
           postcode,
           gemeente,
           prijs,
+          aantalKamers,
+          oppervlakte,
+          beschrijving,
           typeId,
           regioId,
-        },
-      });
-
-      // Update de bijbehorende regio met het bijgewerkte pand
-      await prisma.regio.update({
-        where: {
-          id: regioId,
-        },
-        data: {
-          Panden: {
-            connect: {
-              id: updatedPand.id,
-            },
-          },
-        },
-      });
-
-      // Update het bijbehorende typepand met het bijgewerkte pand
-      await prisma.typePanden.update({
-        where: {
-          id: typeId,
-        },
-        data: {
-          Panden: {
-            connect: {
-              id: updatedPand.id,
-            },
-          },
         },
       });
 
       res.json(updatedPand);
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: "Something went wrong" });
+      res.status(500).json({ error: "fout bij updaten pand" });
     }
   },
 
@@ -207,7 +131,7 @@ const PandenController = {
       res.sendStatus(204);
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: "Something went wrong" });
+      res.status(500).json({ error: "fout bij verwijderen pand" });
     }
   },
 };

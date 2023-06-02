@@ -9,7 +9,7 @@ const RegioController = {
       res.json(regios);
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: "Something went wrong" });
+      res.status(500).json({ error: "fout bij ophalen panden" });
     }
   },
 
@@ -24,11 +24,11 @@ const RegioController = {
       if (regio) {
         res.json(regio);
       } else {
-        res.status(404).json({ error: "Regio not found" });
+        res.status(404).json({ error: "regio niet gevonden" });
       }
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: "Something went wrong" });
+      res.status(500).json({ error: "fout bij ophalen pand" });
     }
   },
 };

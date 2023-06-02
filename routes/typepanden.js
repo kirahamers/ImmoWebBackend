@@ -4,18 +4,18 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const router = express.Router();
 
-// Haal alle typePanden op
+//haal alle typePanden op
 router.get("/", async (req, res) => {
   try {
     const typePanden = await prisma.typePanden.findMany();
     res.json(typePanden);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Something went wrong" });
+    res.status(500).json({ error: "fout bij GET typepanden" });
   }
 });
 
-// Maak een nieuw typePand aan
+//maak een nieuw typePand aan
 router.post("/", async (req, res) => {
   const { naam } = req.body;
   try {
@@ -27,11 +27,11 @@ router.post("/", async (req, res) => {
     res.json(typePand);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Something went wrong" });
+    res.status(500).json({ error: "fout bij POST typepand" });
   }
 });
 
-// Haal een specifiek typePand op
+//haal een specifiek typePand op
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
   try {
@@ -47,11 +47,11 @@ router.get("/:id", async (req, res) => {
     }
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Something went wrong" });
+    res.status(500).json({ error: "fout bij GET typepand by id" });
   }
 });
 
-// Update een bestaand typePand
+//update een bestaand typePand
 router.put("/:id", async (req, res) => {
   const { id } = req.params;
   const { naam } = req.body;
@@ -67,11 +67,11 @@ router.put("/:id", async (req, res) => {
     res.json(updatedTypePand);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Something went wrong" });
+    res.status(500).json({ error: "fout bij UPDATE typepand" });
   }
 });
 
-// Verwijder een typePand
+//verwijder een typePand
 router.delete("/:id", async (req, res) => {
   const { id } = req.params;
   try {
@@ -83,7 +83,7 @@ router.delete("/:id", async (req, res) => {
     res.json({ message: "TypePand deleted successfully" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Something went wrong" });
+    res.status(500).json({ error: "fout bij DELETE typepand" });
   }
 });
 

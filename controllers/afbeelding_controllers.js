@@ -9,7 +9,7 @@ const AfbeeldingenController = {
       res.json(afbeeldingen);
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: "Something went wrong" });
+      res.status(500).json({ error: "fout bij ophalen afbeeldingen" });
     }
   },
 
@@ -25,7 +25,7 @@ const AfbeeldingenController = {
       res.json(afbeelding);
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: "Something went wrong" });
+      res.status(500).json({ error: "fout bij aanmaken afbeelding" });
     }
   },
 
@@ -40,11 +40,11 @@ const AfbeeldingenController = {
       if (afbeelding) {
         res.json(afbeelding);
       } else {
-        res.status(404).json({ error: "Afbeelding not found" });
+        res.status(404).json({ error: "afbeelding not found" });
       }
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: "Something went wrong" });
+      res.status(500).json({ error: "fout bij zoeken van afbeelding" });
     }
   },
 
@@ -64,7 +64,7 @@ const AfbeeldingenController = {
       res.json(updatedAfbeelding);
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: "Something went wrong" });
+      res.status(500).json({ error: "fout bij updaten afbeelding" });
     }
   },
 
@@ -79,7 +79,7 @@ const AfbeeldingenController = {
       res.json(deletedAfbeelding);
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: "Something went wrong" });
+      res.status(500).json({ error: "fout bij verwijderen afbeelding" });
     }
   },
 };

@@ -4,14 +4,14 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const router = express.Router();
 
-// Haal alle regio's op
+//haal alle regio's op
 router.get("/", async (req, res) => {
   try {
     const regios = await prisma.regio.findMany();
     res.json(regios);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Something went wrong" });
+    res.status(500).json({ error: "fout bij GET regio" });
   }
 });
 
@@ -27,7 +27,7 @@ router.post("/", async (req, res) => {
     res.json(regio);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Something went wrong" });
+    res.status(500).json({ error: "fout bij POST regio" });
   }
 });
 
@@ -47,7 +47,7 @@ router.get("/:id", async (req, res) => {
     }
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Something went wrong" });
+    res.status(500).json({ error: "fout bij GET regio by id" });
   }
 });
 
@@ -67,7 +67,7 @@ router.put("/:id", async (req, res) => {
     res.json(updatedRegio);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Something went wrong" });
+    res.status(500).json({ error: "fout bij UPDATE regio" });
   }
 });
 
@@ -83,7 +83,7 @@ router.delete("/:id", async (req, res) => {
     res.json({ message: "Regio deleted successfully" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Something went wrong" });
+    res.status(500).json({ error: "fout bij DELETE regio" });
   }
 });
 

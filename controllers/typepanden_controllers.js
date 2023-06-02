@@ -9,7 +9,7 @@ const TypePandenController = {
       res.json(typePanden);
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: "Something went wrong" });
+      res.status(500).json({ error: "fout bij ophalen typepanden" });
     }
   },
 
@@ -24,11 +24,11 @@ const TypePandenController = {
       if (typePand) {
         res.json(typePand);
       } else {
-        res.status(404).json({ error: "TypePand not found" });
+        res.status(404).json({ error: "typepand niet gevonden" });
       }
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: "Something went wrong" });
+      res.status(500).json({ error: "fout bij ophalen typepand" });
     }
   },
 };

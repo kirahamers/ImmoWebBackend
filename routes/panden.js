@@ -6,18 +6,18 @@ const prisma = new PrismaClient();
 
 const { deleteAfbeeldingenByPandId } = require("./afbeelding");
 
-// Haal alle panden op
+//haal alle panden op
 router.get("/", async (req, res) => {
   try {
     const panden = await prisma.panden.findMany();
     res.json(panden);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Something went wrong" });
+    res.status(500).json({ error: "fout bij GET panden" });
   }
 });
 
-// Maak een nieuw pand aan
+//maak een nieuw pand aan
 router.post("/", async (req, res) => {
   const {
     straat,
@@ -53,11 +53,11 @@ router.post("/", async (req, res) => {
     res.json(pand);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Something went wrong" });
+    res.status(500).json({ error: "fout bij POST pand" });
   }
 });
 
-// Haal een specifiek pand op
+//haal een specifiek pand op
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
   try {
@@ -73,11 +73,11 @@ router.get("/:id", async (req, res) => {
     }
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Something went wrong" });
+    res.status(500).json({ error: "fout bij GET pand by id" });
   }
 });
 
-// Update een bestaand pand
+//update een bestaand pand
 router.put("/:id", async (req, res) => {
   const { id } = req.params;
   const {
@@ -118,11 +118,11 @@ router.put("/:id", async (req, res) => {
     res.json(updatedPand);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Something went wrong" });
+    res.status(500).json({ error: "fout bij UPDATE pand" });
   }
 });
 
-// Verwijder een pand
+//verwijder een pand
 router.delete("/:id", async (req, res) => {
   const { id } = req.params;
   try {
@@ -134,11 +134,11 @@ router.delete("/:id", async (req, res) => {
     res.json({ message: "Pand deleted successfully" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Something went wrong" });
+    res.status(500).json({ error: "fout bij DELETE pand" });
   }
 });
 
-// Verwijder een specifieke afbeelding
+//verwijder een specifieke afbeelding
 router.delete("/:id", async (req, res) => {
   const { id } = req.params;
   try {
@@ -150,17 +150,17 @@ router.delete("/:id", async (req, res) => {
     res.json(deletedAfbeelding);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Something went wrong" });
+    res.status(500).json({ error: "fout bij DELETE afbeelding van pand" });
   }
 });
 
-// Verwijder een specifiek pand en de bijbehorende afbeeldingen
+//verwijder een specifiek pand en de bijbehorende afbeeldingen
 router.delete("/:id", async (req, res) => {
   const { id } = req.params;
   try {
     await deleteAfbeeldingenByPandId(id); // Afbeeldingen verwijderen
     await prisma.panden.delete({
-      // Pand verwijderen
+      //pand verwijderen
       where: {
         id: parseInt(id),
       },
@@ -168,7 +168,7 @@ router.delete("/:id", async (req, res) => {
     res.json({ message: "Pand successfully deleted" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Something went wrong" });
+    res.status(500).json({ error: "fout bij DELETE pand en afbeeldingen" });
   }
 });
 

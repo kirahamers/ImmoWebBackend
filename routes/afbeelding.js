@@ -4,18 +4,18 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const router = express.Router();
 
-// Haal alle afbeeldingen op
+//haal alle afbeeldingen op
 router.get("/", async (req, res) => {
   try {
     const afbeeldingen = await prisma.afbeelding.findMany();
     res.json(afbeeldingen);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Something went wrong" });
+    res.status(500).json({ error: "fout bij GET afbeelding" });
   }
 });
 
-// Maak een nieuwe afbeelding aan
+//maak een nieuwe afbeelding aan
 router.post("/", async (req, res) => {
   const { url, pandId } = req.body;
   try {
@@ -28,11 +28,11 @@ router.post("/", async (req, res) => {
     res.json(afbeelding);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Something went wrong" });
+    res.status(500).json({ error: "fout bij POST afbeelding" });
   }
 });
 
-// Haal een specifieke afbeelding op
+//haal een specifieke afbeelding op
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
   try {
@@ -48,11 +48,11 @@ router.get("/:id", async (req, res) => {
     }
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Something went wrong" });
+    res.status(500).json({ error: "fout bij GET afbeelding by id" });
   }
 });
 
-// Update een specifieke afbeelding
+//update een specifieke afbeelding
 router.put("/:id", async (req, res) => {
   const { id } = req.params;
   const { url, pandId } = req.body;
@@ -69,11 +69,11 @@ router.put("/:id", async (req, res) => {
     res.json(updatedAfbeelding);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Something went wrong" });
+    res.status(500).json({ error: "fout bij PUT afbeelding" });
   }
 });
 
-// Verwijder een specifieke afbeelding
+//verwijder een specifieke afbeelding
 router.delete("/:id", async (req, res) => {
   const { id } = req.params;
   try {
@@ -85,11 +85,11 @@ router.delete("/:id", async (req, res) => {
     res.json(deletedAfbeelding);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Something went wrong" });
+    res.status(500).json({ error: "fout bij DELETE afbeelding" });
   }
 });
 
-// Verwijder afbeeldingen op basis van pandId
+//verwijder afbeeldingen op basis van pandId
 router.delete("/pand/:pandId", async (req, res) => {
   const { pandId } = req.params;
   try {
@@ -101,7 +101,7 @@ router.delete("/pand/:pandId", async (req, res) => {
     res.json(deletedAfbeeldingen);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Something went wrong" });
+    res.status(500).json({ error: "fout bij DELETE afbeeldingen" });
   }
 });
 

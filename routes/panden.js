@@ -4,8 +4,6 @@ const { PrismaClient } = require("@prisma/client");
 
 const prisma = new PrismaClient();
 
-const { deleteAfbeeldingenByPandId } = require("./afbeelding");
-
 //haal alle panden op
 router.get("/", async (req, res) => {
   try {
@@ -151,24 +149,6 @@ router.delete("/:id", async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "fout bij DELETE afbeelding van pand" });
-  }
-});
-
-//verwijder een specifiek pand en de bijbehorende afbeeldingen
-router.delete("/:id", async (req, res) => {
-  const { id } = req.params;
-  try {
-    await deleteAfbeeldingenByPandId(id); // Afbeeldingen verwijderen
-    await prisma.panden.delete({
-      //pand verwijderen
-      where: {
-        id: parseInt(id),
-      },
-    });
-    res.json({ message: "Pand successfully deleted" });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "fout bij DELETE pand en afbeeldingen" });
   }
 });
 
